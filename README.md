@@ -1,5 +1,5 @@
 
-* App is running at ilyanovoselov.ru
+* App is running at [ilyanovoselov.ru] (http://ilyanovoselov.ru)
 
 * Ruby version 2.7.2p137
 

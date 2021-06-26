@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   # get 'actors', to: 'actor#index'
   # get 'actors/:id', to: 'actor#actor'
   resources :actors
+  get 'actors-scrapper', to: 'actors#scrapper'
+
 
 
 

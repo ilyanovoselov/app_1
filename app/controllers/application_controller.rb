@@ -4,11 +4,15 @@
 
 class ApplicationController < ActionController::Base
 
-  def hello
-    render html: "Nslv rails!"
+  def index
+    render :home
   end
 
-  def hola
-    render html: "¡Hola rails!"
+  def about
+    render :about
   end
+
+  # def hola
+  #   render html: "¡Hola rails!"
+  # end
 end

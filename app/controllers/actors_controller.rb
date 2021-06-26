@@ -2,13 +2,13 @@
 # end
 
 
-class ActorController < ActionController::Base
+class ActorsController < ActionController::Base
 
   def index
     @actors = Actor.all
     render :actors
   end
-  def actor
+  def show
     #model
     # ActiveRecord::Base.connection.tables
     # table_exist = ActiveRecord::Base.connection.table_exists? 'actors' #table_exist.to_s

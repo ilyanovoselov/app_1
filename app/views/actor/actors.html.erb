@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Myapp | Project <%= @project_id %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  </head>
+
+  <body>
+    <h1>All Actors</h1>
+    <p>All actors in one page</p>
+
+    <h2>DB data:</h2>
+    <% @actors.each do |actor| %>
+
+      <a href="/actors/<%= actor.id %>"><%= actor.name %></a> <%= '-'+ actor.gender %><br>
+    <% end %>
+
+  </body>
+</html>

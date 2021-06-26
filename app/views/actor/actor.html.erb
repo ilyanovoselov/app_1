@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Myapp | Project <%= @actor_id %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  </head>
+
+  <body>
+    <h1>Actor <%= @actor_id %></h1>
+    <p> <b>Name:</b> <%= @actor.name %></p>
+    <p> <b>Gender:</b> <%= @actor.gender %></p>
+    <br>
+
+    <a href="/actors/<%= @previous_index%>"> < Предыдущий </a>
+    <a href="/actors/<%= @next_index%>"> Следующй > </a>
+    <br>
+
+    <% @ids.each do |id| %>
+        <% if (id == @current_index) %>
+           <b>
+        <% end %>
+
+        <a href="/actors/<%= id %>"> <%= id %></a>
+
+        <% if(id == @current_index)  %>
+          </b>
+       <% end %>
+    <% end %>
+
+    <br>
+    <a href="/actors/"> Все </a>
+
+  </body>
+</html>

@@ -6,5 +6,7 @@
 <h2>DB data:</h2>
 <% @actors.each do |actor| %>
 
+
+
   <a href="/actors/<%= actor.id %>"><%= actor.name %></a> <%= '-'+ actor.gender %><br>
 <% end %>

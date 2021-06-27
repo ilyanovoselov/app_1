@@ -2,8 +2,11 @@
 
     <% content_for :title, "Myapp | Actor " + @actor_id.to_s %>
     <h1>Actor <%= @actor_id %></h1>
+    <img src="<%= @actor_image[:src] %>" alt="<%= @actor_image[:alt] %>" title="<%= @actor_image[:alt] %>" width="150px">
     <p> <b>Name:</b> <%= @actor.name %></p>
     <p> <b>Gender:</b> <%= @actor.gender %></p>
+
+
     <br>
 
     <a href="/actors/<%= @previous_index%>"> < Предыдущий </a>
@@ -21,6 +24,8 @@
           </b>
        <% end %>
     <% end %>
+
+
 
     <br>
     <a href="/actors/"> Все актеры</a>

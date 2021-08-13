@@ -4,11 +4,13 @@
     <title><%= yield(:title) %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
+    <%= javascript_pack_tag 'hello_vue' %> 
   </head>
 
   <body>
     <%= yield %>
     <br>
+    <a href='/'>Home</a><br>
     ____________________<br>
     All actor controller page text
 

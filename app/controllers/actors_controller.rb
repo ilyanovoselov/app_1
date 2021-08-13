@@ -11,12 +11,9 @@ class ActorsController < ActionController::Base
   def show
     require 'open-uri'
     require 'json'
-    #model
-    # ActiveRecord::Base.connection.tables
-    # table_exist = ActiveRecord::Base.connection.table_exists? 'actors' #table_exist.to_s
+
 
     #assembly variables to view
-
     @actor_id = params[:id].to_s
     @actor = Actor.find(@actor_id)
 
@@ -36,7 +33,7 @@ class ActorsController < ActionController::Base
     #kinopoiskapi
 
     url = 'https://kinopoiskapiunofficial.tech/api/v1/staff/'+ @actor.kp_id.to_s
-    html = open(url,"X-API-KEY" => "c710012a-8758-4f12-8d49-02d6e92b2095")
+    html = open(url,"X-API-KEY" => ENV['KPAPI'])
 
     page_data = html.read #open-uri read
     actor_hash = JSON.parse(page_data)
@@ -45,6 +42,9 @@ class ActorsController < ActionController::Base
 
     render :actor
 
+    #model check
+    # ActiveRecord::Base.connection.tables
+    # table_exist = ActiveRecord::Base.connection.table_exists? 'actors' #table_exist.to_s
     # render html: 'Table exists?: '+ table_exist.to_s
   end
 

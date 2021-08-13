@@ -13,8 +13,9 @@
 ActiveRecord::Schema.define(version: 0) do
 
   create_table "actors", force: :cascade do |t|
-    t.text "name", null: false
+    t.text "name"
     t.text "gender"
+    t.text "kp_id"
   end
 
 end

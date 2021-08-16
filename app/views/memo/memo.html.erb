@@ -1,0 +1,22 @@
+<% content_for :title, "Myapp | Memo" %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield(:title) %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= javascript_pack_tag 'memo' %>
+
+  </head>
+
+  <body>
+    <h1>Memo game</h1>
+    <p>Vue test memo game</p>
+    <%=image_tag("memo/1_eltex/ME5000.png", alt: "Example Image")%>
+    <img src="images/memo/1_eltex/ME5000.png" alt="img.name">
+
+
+    <a href="/">Home</a>
+
+  </body>
+</html>

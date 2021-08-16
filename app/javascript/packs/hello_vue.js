@@ -36,14 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
 // import App from '../app.vue'
 //
 // document.addEventListener('DOMContentLoaded', () => {
-//   const app = new Vue({
+//   const hello = new Vue({
 //     el: '#hello',
 //     data: {
-//       message: "Can you say hello?"
+//       message: "Can you say hello?",
+//       seen: true
 //     },
-//     components: { App }
+//     // components: { App }
 //   })
+//
+//   console.log(hello);
+//
+//
+//   hello.message = 'WTF message';
 // })
+
 //
 //
 //

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="seen">
     <p>{{ message }}</p>
   </div>
 </template>
@@ -8,7 +8,8 @@
 export default {
   data: function () {
     return {
-      message: "Hello, Vue!"
+      message: "Hello, Vue!",
+      seen: true
     }
   }
 }

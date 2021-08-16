@@ -6,8 +6,10 @@
 </template>
 
 <script>
+import Card from './card'
 
 export default {
+  components: {Card},
   data: function () {
     return {
       message: "Vue Memo Game!",
@@ -46,7 +48,7 @@ p {
   cursor: pointer;
   box-shadow: 0 0 5px 2px #cfcfcf;
   display: inline-block;
-  transition: all 0.5s;
+  transition: all 0.3s;
   transform-style: preserve-3d;
   /* transform-origin: center right; */
   position: relative;
@@ -73,8 +75,8 @@ p {
 }
 
 .card:hover{
-  /* transform:scale(1.02);
-  box-shadow: 0 0 6px 1px #cfcfcf; */
-  transform: rotateY(180deg);
+  transform:scale(1.02);
+  box-shadow: 0 0 6px 1px #cfcfcf;
+  /* transform: rotateY(180deg); */
 }
 </style>

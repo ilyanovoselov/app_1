@@ -5,21 +5,33 @@ class MemoController < ActionController::Base
   end
 
   def images
+    # params = request.query_parameters
+    if(params[:size].blank?)
+      images_count = 16/2
+    else
+      images_count = params[:size].to_i/2
+    end
     images_array = []
+    images_array_double = []
 
     # Dir.foreach("/home/app_1/workspace/myapp/public/images/memo/1_eltex"){|x| respond_to.push(name:x) }
     # Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/1_eltex"){|x| respond_to.push(name:x) }
-    Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/1_eltex") do |format|
-      images_array.push(name:format.to_s, src:"images/memo/1_eltex/"+format)
-      images_array.push(name:format.to_s+"_double", src:"images/memo/1_eltex/"+format)
+    Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/1_eltex") do |file|
+      images_array.push(name:file.to_s, src:"images/memo/1_eltex/"+file)
     end
 
+    images_array = images_array.shuffle #random before cut
+    images_array = images_array[0, images_count] #cut
+
+    images_array.each do |image_hash|
+      images_array_double.push(name:image_hash[:name]+'_double', src:image_hash[:src])
+    end
+
+    images_array = images_array.concat(images_array_double)
     shuffle_arr = images_array.shuffle
 
     render json: shuffle_arr
 
-    # msg = { :name => "ok", :message => "Success!", :html => "<b>...</b>" }
-    # render :json => msg  # don't do msg.to_json
   end
 
 end

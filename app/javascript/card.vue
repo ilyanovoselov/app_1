@@ -1,5 +1,5 @@
 <template>
-  <div class='card' v-on:click="isActive = !isActive" v-bind:class="{ active: isActive }">
+  <div class='card' v-on:click="cardSelect" v-bind:class="classObject">
     <div  class="card-face card-back">
     </div>
     <div class="card-face card-front" :style="{ backgroundImage: `url(${card_data.src})` }" :alt="card_data.name">
@@ -10,11 +10,44 @@
 <script>
 export default {
   name: 'Card',
-  props: ['card_data'],
+  props: ['card_data','custom_index'],
   data: function () {
     return {
       message: "Card message",
-      isActive: false
+      pair_id: this.card_data.pair_id,
+      // status: this.card_data.status
+      // card_key:this.custom_index
+      // this._uid
+    }
+  },
+  computed: {
+    classObject: function () {
+        return {
+        'active': !this.status=='',
+        'passed': this.status=='pass'
+      }
+    },
+    status: function () {
+      return this.card_data.status
+    },
+    cardCoord: function(){
+      return {
+        x: this.$el.getBoundingClientRect().left,
+        y: this.$el.getBoundingClientRect().top
+      }
+    }
+  },
+  methods: {
+    cardSelect: function (){
+      this.$emit('select', {'card_id':this.custom_index, 'pair_id':this.pair_id});
+    },
+    setCard(type){
+      if(type){
+        console.log('passed!');
+      }else{
+        this.isActive = false;
+      }
+
     }
   }
 }
@@ -71,4 +104,27 @@ export default {
 .card.active:hover{
   transform: rotateY(180deg) scale(1.02);
 }
+
+.card.passed{
+  filter: hue-rotate(292deg);
+  opacity: 0;
+  /* animation-duration: 0.3s;
+  animation-name: passcard; */
+}
+
+@keyframes passcard {
+  0{
+    opacity:1;
+  }
+
+  50%{
+    filter: hue-rotate(292deg);
+    opacity:1;
+  }
+
+  100% {
+    opacity:0;
+  }
+}
+
 </style>

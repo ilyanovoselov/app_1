@@ -16,15 +16,17 @@ class MemoController < ActionController::Base
 
     # Dir.foreach("/home/app_1/workspace/myapp/public/images/memo/1_eltex"){|x| respond_to.push(name:x) }
     # Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/1_eltex"){|x| respond_to.push(name:x) }
+    pair_id = 1;
     Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/1_eltex") do |file|
-      images_array.push(name:file.to_s, src:"images/memo/1_eltex/"+file)
+      images_array.push(pair_id:pair_id,name:file.to_s, src:"images/memo/1_eltex/"+file,status:'')
+      pair_id +=1
     end
 
     images_array = images_array.shuffle #random before cut
     images_array = images_array[0, images_count] #cut
 
     images_array.each do |image_hash|
-      images_array_double.push(name:image_hash[:name]+'_double', src:image_hash[:src])
+      images_array_double.push(pair_id:image_hash[:pair_id],name:image_hash[:name]+'_double', src:image_hash[:src],status:'')
     end
 
     images_array = images_array.concat(images_array_double)

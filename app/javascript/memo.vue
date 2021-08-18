@@ -1,9 +1,10 @@
 <template>
   <div id="app" v-if="seen" v-bind:class="[activeClass]">
-    <button v-on:click="setField(16)" >Поле 16</button>
-    <button v-on:click="setField(36)" >Поле 36</button>
+    <button class="primary" v-on:click="setField(4)" >Поле 4</button>
+    <button class="primary" v-on:click="setField(16)" >Поле 16</button>
+    <button class="primary" v-on:click="setField(36)" >Поле 36</button>
     <p>{{ message }}</p>
-    <card v-for="img in images" v-bind:key="img.id" v-bind:card_data="img"></card>
+    <card v-for="(img,index) in images" v-bind:key="img.id" v-bind:card_data="img" v-bind:custom_index="index" @select="rememberSelected" ref="updateChild"></card>
   </div>
 </template>
 
@@ -17,10 +18,12 @@ export default {
       message: "Vue Memo Game!",
       seen: true,
       images: [
-          {name: 'eltex_1', id: 1, src: 'images/memo/1_eltex/olt-ma4000_px_l.png'},
+          {name: 'eltex_1', id: 1, src: 'images/memo/1_eltex/olt-ma4000_px_l.png',status:''},
       ],
       size:16,
-      activeClass: 'size_16'
+      activeClass: 'size_16',
+      score:0,
+      selected_cards:[]
     }
   },
   created(){
@@ -38,6 +41,63 @@ export default {
       let data = await response.json();
       this.images =  data;
       console.log(data);
+    },
+    tossCards(){
+      
+    },
+    rememberSelected: function(incoming_card_data){
+      console.log(incoming_card_data);
+
+      //get card status not empty
+      if(this.selected_cards.length == 0){
+        //update 1st card
+        console.log('1st card selected');
+
+        this.selected_cards[0] = this.images[incoming_card_data.card_id]; // remember 1st card
+        this.selected_cards[0].status = 'pending';
+
+      } else if(this.selected_cards.length == 1){
+        //update 2nd card
+        console.log('2nd card selected');
+
+        this.selected_cards[1] = this.images[incoming_card_data.card_id]; // remember 2d card
+        this.selected_cards[1].status = 'pending';
+
+        let temp_status = '';
+        if(this.selected_cards[0].pair_id ==this.selected_cards[1].pair_id){
+          console.log('pass');
+          temp_status = 'pass';
+          this.score +=2;
+          this.message = 'Your score is: '+this.score;
+          if(this.score == this.size){
+            this.message = 'Congratulations!';
+          }
+        } else {
+          console.log('wrong guess');
+          temp_status = ''
+        }
+
+        setTimeout(()=>{
+          this.selected_cards[0].status = temp_status;
+          this.selected_cards[1].status = temp_status;
+          this.selected_cards=[];
+
+          if(this.score == this.size){ // show all cards after game is completed
+            Object.entries(this.images).forEach(([key, image_object]) => {
+              Object.keys(image_object).forEach(function(key){ image_object['status'] = "pending" });
+            });
+          }
+        }, 2000);
+
+      }
+    }
+  },
+  computed:{
+    screenCenter: function(){
+      return {
+        x:window.innerWidth/2,
+        y:window.innerHeight/2
+      }
     }
   }
 }
@@ -57,5 +117,18 @@ export default {
 p {
   font-size: 2em;
   text-align: center;
+}
+
+button.primary{
+  cursor:pointer;
+  border:none;
+  background-color: #72c3f7;
+  color:white;
+  padding:10px 20px;
+  border-radius: 1px;
+  transiton: all 0.2s ease-out;
+}
+button.primary:hover{
+  background-color: #5fa9d9;
 }
 </style>

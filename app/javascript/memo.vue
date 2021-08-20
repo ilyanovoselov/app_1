@@ -48,20 +48,12 @@ export default {
         this.tossCards();
       },100);
     },
-    async tossCards(){
-
+    tossCards: function(){
       this.$refs.cardChild.forEach(async card_child => {
-
         card_child.$el.style.transition = 'none';
-
-        let promise = new Promise( resolve =>{
-            let temp_x = this.screenCenter.x - card_child.card_coord.x;
-            let temp_y = this.screenCenter.y - card_child.card_coord.y;
-            resolve(Velocity(card_child.$el, {translateX: temp_x+"px",translateY: temp_y+"px"}));
-          }
-        );
-        let result = await promise;
-
+        let temp_x = this.screenCenter.x - card_child.card_coord.x;
+        let temp_y = this.screenCenter.y - card_child.card_coord.y;
+        await Velocity(card_child.$el, {translateX: temp_x+"px",translateY: temp_y+"px"});
         await Velocity(card_child.$el, 'reverse');
         card_child.$el.style='';
       })

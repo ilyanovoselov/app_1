@@ -61,7 +61,7 @@ export default {
     resetGame: function(){
       this.score = 0;
       this.selected_cards = [];
-      this.message = "Game has restarted!";
+      // this.message = "Game has restarted!";
     },
     rememberSelected: function(incoming_card_data){
       // console.log(incoming_card_data);
@@ -72,25 +72,34 @@ export default {
         this.selected_cards[0].status = 'pending';
 
       } else if(this.selected_cards.length == 1){
+
+        //check for click on current active card
+        if(this.selected_cards[0].card_id == incoming_card_data.card_id){
+          this.message = 'Please choose another card';
+          return false;
+        }
         //update 2nd card
         this.selected_cards[1] = this.images[incoming_card_data.card_id]; // remember 2d card
         this.selected_cards[1].status = 'pending';
 
         let temp_status = '';
+        let temp_message = '';
         if(this.selected_cards[0].pair_id ==this.selected_cards[1].pair_id){
-          console.log('pass');
-          temp_status = 'pass';
           this.score +=2;
-          this.message = 'Your score is: '+this.score;
+          this.message = 'Yeap!';
+          temp_message = 'Your score is: '+this.score;
+          temp_status = 'pass';
           if(this.score == this.size){
             this.message = 'Congratulations!';
           }
         } else {
-          console.log('wrong guess');
+          this.message = 'Wrong guess!';
+          temp_message ='Please select another pair';
           temp_status = ''
         }
 
         setTimeout(()=>{
+          this.message = temp_message;
           this.selected_cards[0].status = temp_status;
           this.selected_cards[1].status = temp_status;
           this.selected_cards=[];

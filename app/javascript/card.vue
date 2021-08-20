@@ -15,6 +15,7 @@ export default {
     return {
       message: "Card message",
       pair_id: this.card_data.pair_id,
+      card_coord: {}
       // status: this.card_data.status
       // card_key:this.custom_index
       // this._uid
@@ -29,27 +30,25 @@ export default {
     },
     status: function () {
       return this.card_data.status
-    },
-    cardCoord: function(){
-      return {
-        x: this.$el.getBoundingClientRect().left,
-        y: this.$el.getBoundingClientRect().top
-      }
     }
   },
   methods: {
     cardSelect: function (){
       this.$emit('select', {'card_id':this.custom_index, 'pair_id':this.pair_id});
     },
-    setCard(type){
-      if(type){
-        console.log('passed!');
-      }else{
-        this.isActive = false;
+    cardCoord: function(){
+      this.card_coord = {
+        x: this.$el.getBoundingClientRect().left,
+        y: this.$el.getBoundingClientRect().top
       }
-
     }
-  }
+  },
+  updated: function(){
+    this.cardCoord();
+  },
+  mounted: function(){
+    this.cardCoord();
+  },
 }
 </script>
 
@@ -59,10 +58,9 @@ export default {
   height: 110px;
   margin:5px;
   cursor: pointer;
-  box-shadow: 0 0 5px 2px #cfcfcf;
+  box-shadow: 0 0 5px 2px #0000000a;
   display: inline-block;
-  transition: all 0.3s;
-
+  transition: transform 0.3s, filter 0.3s;
   transition-timing-function:  cubic-bezier(.27,-0.34,.73,1.03);
   transform-style: preserve-3d;
   /* transform-origin: center right; */

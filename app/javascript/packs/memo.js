@@ -1,5 +1,6 @@
 // import Vue from 'vue'
 import Vue from 'vue/dist/vue.esm' //version with template compiler (for multicomponent template render usage)
+import Velocity from "velocity-animate";
 
 import App from '../memo.vue'
 

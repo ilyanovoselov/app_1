@@ -3,8 +3,9 @@
     <button class="primary" v-on:click="setField(4)" >Поле 4</button>
     <button class="primary" v-on:click="setField(16)" >Поле 16</button>
     <button class="primary" v-on:click="setField(36)" >Поле 36</button>
+    <button class="primary" v-on:click="tossCards()" >Перетасовать</button>
     <p>{{ message }}</p>
-    <card v-for="(img,index) in images" v-bind:key="img.id" v-bind:card_data="img" v-bind:custom_index="index" @select="rememberSelected" ref="updateChild"></card>
+    <card v-for="(img,index) in images" v-bind:key="img.id" v-bind:card_data="img" v-bind:custom_index="index" @select="rememberSelected" ref="cardChild"></card>
   </div>
 </template>
 
@@ -39,27 +40,47 @@ export default {
       let url = 'http://novoselovilya.ru/memo/images?size='+this.size;
       let response = await fetch(url);
       let data = await response.json();
-      this.images =  data;
-      console.log(data);
+      this.images = await data;
+      // console.log(data);
+      this.resetGame();
+
+      setTimeout(()=>{
+        this.tossCards();
+      },100);
     },
-    tossCards(){
-      
+    async tossCards(){
+
+      this.$refs.cardChild.forEach(async card_child => {
+
+        card_child.$el.style.transition = 'none';
+
+        let promise = new Promise( resolve =>{
+            let temp_x = this.screenCenter.x - card_child.card_coord.x;
+            let temp_y = this.screenCenter.y - card_child.card_coord.y;
+            resolve(Velocity(card_child.$el, {translateX: temp_x+"px",translateY: temp_y+"px"}));
+          }
+        );
+        let result = await promise;
+
+        await Velocity(card_child.$el, 'reverse');
+        card_child.$el.style='';
+      })
+    },
+    resetGame: function(){
+      this.score = 0;
+      this.selected_cards = [];
+      this.message = "Game has restarted!";
     },
     rememberSelected: function(incoming_card_data){
-      console.log(incoming_card_data);
-
+      // console.log(incoming_card_data);
       //get card status not empty
       if(this.selected_cards.length == 0){
         //update 1st card
-        console.log('1st card selected');
-
         this.selected_cards[0] = this.images[incoming_card_data.card_id]; // remember 1st card
         this.selected_cards[0].status = 'pending';
 
       } else if(this.selected_cards.length == 1){
         //update 2nd card
-        console.log('2nd card selected');
-
         this.selected_cards[1] = this.images[incoming_card_data.card_id]; // remember 2d card
         this.selected_cards[1].status = 'pending';
 

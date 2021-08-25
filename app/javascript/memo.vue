@@ -1,8 +1,8 @@
 <template>
   <div id="app" >
     <div id="menu">
-      <button v-on:click="startGame()">Show desk</button>
-      <button v-on:click="showSettings()">Settings</button>
+      <!-- <button v-on:click="startGame()">Show desk</button> -->
+      <!-- <button v-on:click="showSettings()">Settings</button> -->
     </div>
 
     <div v-if="seenSettings" class="settings">

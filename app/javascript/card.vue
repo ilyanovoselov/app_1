@@ -15,6 +15,7 @@ export default {
     return {
       message: "Card message",
       pair_id: this.card_data.pair_id,
+      card_index: this.card_data.index,
       card_coord: {}
       // status: this.card_data.status
       // card_key:this.custom_index

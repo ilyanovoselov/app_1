@@ -1,0 +1,18 @@
+<% content_for :title, "Myapp | Memo" %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield(:title) %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= javascript_pack_tag 'memo' %>
+
+  </head>
+
+  <body>
+    <h1>Memo game</h1>
+    <p>Vue test memo game</p>
+    <a href="/">Home</a>
+
+  </body>
+</html>

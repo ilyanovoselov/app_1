@@ -53,9 +53,7 @@ export default {
 
 <style scoped>
   #app{
-    width:500px;
-    margin-left: auto;
-    margin-right: auto;
+
   }
 
   #menu button{

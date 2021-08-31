@@ -14,8 +14,6 @@ export default {
   data: function () {
     return {
       message: "Card message",
-      pair_id: this.card_data.pair_id,
-      card_index: this.card_data.index,
       card_coord: {}
       // status: this.card_data.status
       // card_key:this.custom_index
@@ -31,11 +29,20 @@ export default {
     },
     status: function () {
       return this.card_data.status
+    },
+    visited: function() {
+      return this.card_data.visited
+    },
+    card_index: function() {
+      return this.card_data.index
+    },
+    pair_id: function() {
+      return this.card_data.pair_id
     }
   },
   methods: {
     cardSelect: function (){
-      this.$emit('select', {'card_id':this.custom_index, 'pair_id':this.pair_id});
+      this.$emit('select', {'card_id':this.custom_index, 'pair_id':this.pair_id,'player_id':0});
     },
     cardCoord: function(){
       this.card_coord = {
@@ -55,8 +62,8 @@ export default {
 
 <style scoped>
 .card{
-  width:110px;
-  height: 110px;
+  width:150px;
+  height:150px;
   margin:5px;
   cursor: pointer;
   box-shadow: 0 0 5px 2px #0000000a;
@@ -107,8 +114,13 @@ export default {
 .card.passed{
   filter: hue-rotate(292deg);
   opacity: 0;
+  pointer-events: none;
   /* animation-duration: 0.3s;
   animation-name: passcard; */
+}
+
+.unplayable .card{
+  pointer-events: none;
 }
 
 @keyframes passcard {

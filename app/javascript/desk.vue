@@ -1,8 +1,5 @@
 <template>
-  <div id="desk" v-if="seen" v-bind:class="[activeClass, deskPlayable]">
-    <!-- <button class="primary" v-on:click="setField(4)" >Поле 4</button> -->
-    <button class="primary" v-on:click="setField(16)" v-bind:class="{'selected':activeClass =='size_16'}">Поле 16</button>
-    <button class="primary" v-on:click="setField(36)" v-bind:class="{'selected':activeClass =='size_36'}">Поле 36</button>
+  <div id="desk" v-if="seen" v-bind:class="[deskPlayable,deskHeight,wwttff]" v-bind:style="{height:deskHeight}">
     <p>{{ message }}</p>
     <div class="players-panel"><div v-for="player in players" v-bind:class="player.class" >{{ player.name }} : {{ player.score }}</div></div>
     <card v-for="(img,index) in images" v-bind:key="img.id" v-bind:card_data="img" v-bind:custom_index="index" @select="rememberSelected" ref="cardChild"></card>
@@ -14,29 +11,59 @@ import Card from './card'
 
 export default {
   components: {Card},
-  props: ['desk_data'],
+  props: ['seen_desk','size'],
   data: function () {
     return {
       message: "Vue Memo Game!",
       images: [
           {name: 'eltex_1', id: 1, src: 'images/memo/1_eltex/olt-ma4000_px_l.png',status:''},
       ],
-      activeClass: 'size_36',
       deskPlayable: '',
-      size:36,
+      wwttff:'sukka',
       totalScore:0,
       selected_cards:[],
+      deskHeight: '0px'
     }
   },
-  created(){
-    this.getCards(this.size);
+  mounted(){
+    // this.getCards(this.size);
   },
-  methods: {
-    setField: function (newsize) {
-      this.size = newsize;
-      this.activeClass = 'size_'+this.size;
+  updated(){
+    // this.getCards(this.size);
+    let desk_width = this.$el.offsetWidth;
+    console.log(desk_width);
+    this.deskHeight = desk_width+'px';
+  },
+  watch: {
+    size: function () {
       this.getCards(this.size);
     },
+    seen_desk: function (){
+      if(this.seen_desk){
+        this.getCards(this.size);
+      } else {
+        this.resetGame();
+      }
+    }
+  },
+  computed:{
+    screenCenter: function(){
+      return {
+        x:window.innerWidth/2,
+        y:window.innerHeight/2
+      }
+    },
+    seen: function(){
+      return this.seen_desk
+    },
+    players: function(){
+      return {
+        0: {name:'Player',score:0,class:'active'},
+        1: {name:'AI',score:0,class:''}
+      }
+    }
+  },
+  methods: {
     async getCards() {
       let url = 'http://novoselovilya.ru/memo/images?size='+this.size;
       let response = await fetch(url);
@@ -262,77 +289,61 @@ export default {
       );
 
     }
-  },
-  computed:{
-    screenCenter: function(){
-      return {
-        x:window.innerWidth/2,
-        y:window.innerHeight/2
-      }
-    },
-    seen: function(){
-      return this.desk_data
-    },
-    players: function(){
-      return {
-        0: {name:'Player',score:0,class:'active'},
-        1: {name:'AI',score:0,class:''}
-      }
-    }
   }
 }
 </script>
 
 <style scoped>
-#desk{
+#desk {
+  box-sizing: border-box;
   width:100%;
-  margin-left: auto;
-  margin-right: auto;
 }
-#desk.size_16{
-  width: 650px;
+#app.size_16 #desk{
+  height: 650px;
 }
-#desk.size_36{
-  width: 1000px;
+#app.size_36 #desk{
+  height: 1000px;
 }
+
+@media(max-width:1024px){
+  #desk{
+    width:100%;
+  }
+}
+
 p {
   font-size: 2em;
   text-align: center;
-}
-
-button.primary{
-  cursor:pointer;
-  border:none;
-  background-color: #72c3f7;
-  color:white;
-  padding:10px 20px;
-  border-radius: 1px;
-  transition: all 0.2s ease-out;
-  margin:3px 1px;
-}
-button.primary:hover{
-  background-color: #5fa9d9;
-}
-
-button.primary.selected{
-  background-color: #68a4d0;
-  /* pointer-events: none; */
 }
 
 .players-panel{
   width:100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  height: 36px;
 }
 
 .players-panel div{
-  width:100px;
+  width:150px;
   font-weight: bold;
   transition: all 0.4s ease-out;
   text-align: center;
   font-size: 19px;
 }
 .players-panel div.active{
-  transform:scale(1.5);
+  font-size: 31px;
+}
+
+@media(max-width:600px){
+
+  p {
+    font-size:  1.2em;
+    text-align: center;
+  }
+
+  .players-panel div.active{
+    font-size: 25px;
+  }
 }
 </style>

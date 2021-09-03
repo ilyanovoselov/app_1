@@ -13,10 +13,8 @@ export default {
   props: ['card_data','custom_index'],
   data: function () {
     return {
-      message: "Card message",
       card_coord: {}
       // status: this.card_data.status
-      // card_key:this.custom_index
       // this._uid
     }
   },
@@ -61,18 +59,28 @@ export default {
 </script>
 
 <style scoped>
+
 .card{
-  width:150px;
-  height:150px;
-  margin:5px;
+  margin:1px;
   cursor: pointer;
   box-shadow: 0 0 5px 2px #0000000a;
-  display: inline-block;
+  display: block;
+  float: left;
   transition: transform 0.3s, filter 0.3s;
   transition-timing-function:  cubic-bezier(.27,-0.34,.73,1.03);
   transform-style: preserve-3d;
   /* transform-origin: center right; */
   position: relative;
+}
+
+#app.size_16 .card{
+  width: 24.5%;
+  height: 24.5%;
+}
+
+#app.size_36 .card{
+  width: 16.4%;
+  height: 16.4%;
 }
 
 .card-face{
@@ -135,6 +143,11 @@ export default {
 
   100% {
     opacity:0;
+  }
+}
+@media(max-width:600px){
+  .card{
+    margin:0;
   }
 }
 

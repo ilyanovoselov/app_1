@@ -1,5 +1,5 @@
 <template>
-  <div class='card' v-on:click="cardSelect" v-bind:class="classObject">
+  <div class='card' v-on:click="cardSelect" v-bind:class="classObject" v-bind:style="{ transform: 'rotate('+ card_rotate+')'}">
     <div  class="card-face card-back">
     </div>
     <div class="card-face card-front" :style="{ backgroundImage: `url(${card_data.src})` }" :alt="card_data.name">
@@ -13,7 +13,7 @@ export default {
   props: ['card_data','custom_index'],
   data: function () {
     return {
-      card_coord: {}
+      card_coord: {},
       // status: this.card_data.status
       // this._uid
     }
@@ -36,6 +36,9 @@ export default {
     },
     pair_id: function() {
       return this.card_data.pair_id
+    },
+    card_rotate:  function() {
+      return this.card_data.rotate
     }
   },
   methods: {
@@ -55,6 +58,14 @@ export default {
   mounted: function(){
     this.cardCoord();
   },
+  watch:  {
+    status: function(){
+      console.log(this.status);
+      if (this.status == 'pending'){
+        this.$el.style.transform = '';
+      }
+    }
+  }
 }
 </script>
 
@@ -148,6 +159,11 @@ export default {
 @media(max-width:600px){
   .card{
     margin:0;
+    box-shadow: none;
+  }
+
+  .card:hover{
+    box-shadow: none;
   }
 }
 

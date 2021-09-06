@@ -1,5 +1,5 @@
 <template>
-  <div id="desk" v-if="seen" v-bind:class="[deskPlayable,deskHeight,wwttff]" v-bind:style="{height:deskHeight}">
+  <div id="desk" v-if="seen" v-bind:class="[deskPlayable]" v-bind:style="{height:deskHeight}">
     <p>{{ message }}</p>
     <div class="players-panel"><div v-for="player in players" v-bind:class="player.class" >{{ player.name }} : {{ player.score }}</div></div>
     <card v-for="(img,index) in images" v-bind:key="img.id" v-bind:card_data="img" v-bind:custom_index="index" @select="rememberSelected" ref="cardChild"></card>
@@ -11,7 +11,7 @@ import Card from './card'
 
 export default {
   components: {Card},
-  props: ['seen_desk','size'],
+  props: ['seen_desk','size','enableAudio'],
   data: function () {
     return {
       message: "Vue Memo Game!",
@@ -19,10 +19,19 @@ export default {
           {name: 'eltex_1', id: 1, src: 'images/memo/1_eltex/olt-ma4000_px_l.png',status:''},
       ],
       deskPlayable: '',
-      wwttff:'sukka',
       totalScore:0,
       selected_cards:[],
-      deskHeight: '0px'
+      deskHeight: '0px',
+      audioShuffle: new Audio('sounds/card_shuffle_single.mp3'),
+      audioCardsBack: new Audio('sounds/cards_back.mp3'),
+      audioMatch: new Audio('sounds/clean_2.mp3'),
+      audioCards:[
+        new Audio('sounds/card_single_1.mp3'),
+        new Audio('sounds/card_single_2.mp3'),
+        new Audio('sounds/card_single_3.mp3'),
+        new Audio('sounds/card_single_4.mp3'),
+        new Audio('sounds/card_single_5.mp3'),
+      ]
     }
   },
   mounted(){
@@ -31,7 +40,7 @@ export default {
   updated(){
     // this.getCards(this.size);
     let desk_width = this.$el.offsetWidth;
-    console.log(desk_width);
+    // console.log(desk_width);
     this.deskHeight = desk_width+'px';
   },
   watch: {
@@ -65,6 +74,11 @@ export default {
   },
   methods: {
     async getCards() {
+
+      if(this.enableAudio){
+        this.audioShuffle.play();
+      }
+
       let url = 'http://novoselovilya.ru/memo/images?size='+this.size;
       let response = await fetch(url);
       let data = await response.json();
@@ -74,14 +88,14 @@ export default {
           data[iterator].card_id = iterator;
           data[iterator].index = {x:j,y:i};
           data[iterator].visited = 0;
+          data[iterator].rotate = '0deg';
           iterator++;
         }
       }
 
       this.images = await data;
-      console.log(this.images);
+      // console.log(this.images);
 
-      // console.log(data);
       this.resetGame();
 
       setTimeout(()=>{
@@ -106,6 +120,11 @@ export default {
       // this.message = "Game has restarted!";
     },
     rememberSelected: function(incoming_card_data){
+
+      if(this.enableAudio){
+        let card_single_sound = _.sample(this.audioCards);
+        card_single_sound.play();
+      }
       // console.log(incoming_card_data);
 
       //remember cards visits
@@ -152,6 +171,10 @@ export default {
           this.message = 'Yeap!';
           temp_message = 'Next turn';
           temp_status = 'pass';
+          if(this.enableAudio){
+            this.audioMatch.play();
+          }
+
           if(this.totalScore == this.size){
             this.message = 'Congratulations!';
             temp_message = 'Game Over';
@@ -163,6 +186,24 @@ export default {
         }
 
         setTimeout(()=>{
+
+          if(temp_status ==''){
+              let rotate_factor = _.random(-1.5, 1.5);
+              this.selected_cards[0].rotate =  rotate_factor+"deg";
+              rotate_factor = _.random(-1.5, 1.5);
+              this.selected_cards[1].rotate =  rotate_factor+"deg";
+
+              if(this.enableAudio){
+                this.audioCardsBack.play();
+              }
+          }
+
+          if(temp_status=='pass'){
+            if(this.enableAudio){
+              this.audioCardsBack.play();
+            }
+          }
+
           this.message = temp_message;
           this.selected_cards[0].status = temp_status;
           this.selected_cards[1].status = temp_status;
@@ -186,8 +227,8 @@ export default {
             this.players[1].class = 'active';
           }
 
-          console.log(incoming_card_data.player_id );
-          console.log(last_guessed_player_id);
+          // console.log(incoming_card_data.player_id );
+          // console.log(last_guessed_player_id);
           if(incoming_card_data.player_id === 0 && last_guessed_player_id === 0){
             this.deskPlayable = '';
           }
@@ -332,7 +373,7 @@ p {
   font-size: 19px;
 }
 .players-panel div.active{
-  font-size: 31px;
+  font-size: 28px;
 }
 
 @media(max-width:600px){
@@ -343,7 +384,7 @@ p {
   }
 
   .players-panel div.active{
-    font-size: 25px;
+    font-size: 24px;
   }
 }
 </style>

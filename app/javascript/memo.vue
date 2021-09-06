@@ -9,6 +9,7 @@
       <div v-if="seenSettings" id="settings">
         <button class="primary" v-on:click="setField(16)" v-bind:class="{'selected':deskClass =='size_16'}">Поле 16</button>
         <button class="primary" v-on:click="setField(36)" v-bind:class="{'selected':deskClass =='size_36'}">Поле 36</button>
+        <button class="primary" v-on:click="toggleSounds()" v-bind:class="{'selected':enableAudio }">Звуки</button>
           <ul>
             <li v-on:click="showSettings()">Назад </li>
             <li>Настройка 1</li>
@@ -18,7 +19,7 @@
           </ul>
       </div>
 
-    <desk v-bind:seen_desk="seenDesk" v-bind:size="size"></desk>
+    <desk v-bind:seen_desk="seenDesk" v-bind:size="size" v-bind:enableAudio="enableAudio"></desk>
   </div>
 </template>
 
@@ -36,7 +37,8 @@ export default {
       seenMenu: true,
       seenDesk: false,
       seenSettings: false,
-      gameInit:true
+      gameInit:true,
+      enableAudio:true
     }
   },
   created(){
@@ -60,6 +62,9 @@ export default {
     setField: function (newsize) {
       this.size = newsize;
       this.deskClass = 'size_'+this.size;
+    },
+    toggleSounds: function () {
+      this.enableAudio = !this.enableAudio;
     }
   },
   computed:{

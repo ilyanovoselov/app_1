@@ -45,4 +45,5 @@ yarn-debug.log*
 
 #ignore images assets
 /public/images
+/public/sounds
 /app/assets/images

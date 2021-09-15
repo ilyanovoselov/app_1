@@ -18,4 +18,9 @@ ActiveRecord::Schema.define(version: 0) do
     t.text "kp_id"
   end
 
+  create_table "nicknames", id: false, force: :cascade do |t|
+    t.text "part"
+    t.text "value"
+  end
+
 end

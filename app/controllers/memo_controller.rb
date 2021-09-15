@@ -11,14 +11,20 @@ class MemoController < ActionController::Base
     else
       images_count = params[:size].to_i/2
     end
+
+    if(params[:gallery].blank?)
+      gallery = '1_eltex'
+    else
+      gallery = params[:gallery]      
+    end
     images_array = []
     images_array_double = []
 
     # Dir.foreach("/home/app_1/workspace/myapp/public/images/memo/1_eltex"){|x| respond_to.push(name:x) }
     # Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/1_eltex"){|x| respond_to.push(name:x) }
     pair_id = 1;
-    Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/1_eltex") do |file|
-      images_array.push(pair_id:pair_id,name:file.to_s, src:"images/memo/1_eltex/"+file,status:'')
+    Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/"+gallery) do |file|
+      images_array.push(pair_id:pair_id,name:file.to_s, src:"images/memo/"+gallery+"/"+file,status:'')
       pair_id +=1
     end
 

@@ -2,7 +2,7 @@
   <div id="desk" v-if="seen" v-bind:class="[deskPlayable]" v-bind:style="{height:deskHeight}">
     <p>{{ message }}</p>
     <div class="players-panel"><div v-for="player in players" v-bind:class="player.class" >{{ player.name }} : {{ player.score }}</div></div>
-    <card v-for="(img,index) in images" v-bind:key="img.id" v-bind:card_data="img" v-bind:custom_index="index" @select="rememberSelected" ref="cardChild"></card>
+    <card v-for="(img,index) in images" v-bind:key="img.id" v-bind:card_data="img" v-bind:custom_index="index" v-bind:gallery="gallery" @select="rememberSelected" ref="cardChild"></card>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import Card from './card'
 
 export default {
   components: {Card},
-  props: ['seen_desk','size','enableAudio'],
+  props: ['seen_desk','size','enableAudio','gallery','playerName'],
   data: function () {
     return {
       message: "Vue Memo Game!",
@@ -31,6 +31,7 @@ export default {
         new Audio('sounds/card_single_3.mp3'),
         new Audio('sounds/card_single_4.mp3'),
         new Audio('sounds/card_single_5.mp3'),
+        new Audio('sounds/card_single_6.mp3'),
       ]
     }
   },
@@ -45,15 +46,18 @@ export default {
   },
   watch: {
     size: function () {
-      this.getCards(this.size);
+      this.getCards();
     },
     seen_desk: function (){
       if(this.seen_desk){
-        this.getCards(this.size);
+        this.getCards();
       } else {
         this.resetGame();
       }
-    }
+    },
+    gallery: function () {
+      this.getCards();
+    },
   },
   computed:{
     screenCenter: function(){
@@ -67,7 +71,7 @@ export default {
     },
     players: function(){
       return {
-        0: {name:'Player',score:0,class:'active'},
+        0: {name:this.playerName,score:0,class:'active'},
         1: {name:'AI',score:0,class:''}
       }
     }
@@ -79,7 +83,7 @@ export default {
         this.audioShuffle.play();
       }
 
-      let url = 'http://novoselovilya.ru/memo/images?size='+this.size;
+      let url = 'http://novoselovilya.ru/memo/images?size='+this.size+'&gallery='+this.gallery;
       let response = await fetch(url);
       let data = await response.json();
       let iterator = 0;
@@ -366,7 +370,6 @@ p {
 }
 
 .players-panel div{
-  width:150px;
   font-weight: bold;
   transition: all 0.4s ease-out;
   text-align: center;

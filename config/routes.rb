@@ -8,8 +8,7 @@ Rails.application.routes.draw do
   # get 'actors/:id', to: 'actor#actor'
   resources :actors
   get 'actors-scrapper', to: 'actors#scrapper'
-
-
-
+  mount ActionCable.server, at: '/cable'
+  get 'nicknames', to: 'nicknames#index'
 
 end

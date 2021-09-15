@@ -117,6 +117,10 @@ export default {
   background-image: url('/images/memo/memo_card_back.png');
 }
 
+.classic-gallery .card-back{
+  filter: hue-rotate(160deg);
+}
+
 .card:hover{
   transform:scale(1.02);
   box-shadow: 0 0 6px 1px #cfcfcf;
@@ -124,6 +128,7 @@ export default {
 
 .card.active{
   transform: rotateY(180deg);
+  pointer-events: none;
 }
 
 .card.active:hover{

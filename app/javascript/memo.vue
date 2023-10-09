@@ -179,7 +179,7 @@ export default {
       memoRoomChannel.announce({ name:this.playerName, player_id:this.playerID, type: 'read_message', messageID: mess_id});
     },
     async getNickname(){
-      let url = 'http://novoselovilya.ru/nicknames';
+      let url = 'https://novoselovilya.ru/myapp/nicknames';
       let response = await fetch(url);
       let data = await response.json();
       this.playerName = data.property.charAt(0).toUpperCase() + data.property.slice(1) +' '+ data.animal.charAt(0).toUpperCase() + data.animal.slice(1);

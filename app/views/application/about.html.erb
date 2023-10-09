@@ -1,7 +1,7 @@
     <% content_for :title, "Myapp | About" %>
     <h1>About</h1>
 
-    <p>App is running at <a href='/'>novoselovilya.ru </a></p>
+    <p>App is running at <%= link_to "novoselovilya.ru"+ENV["RAILS_RELATIVE_URL_ROOT"], ENV["RAILS_RELATIVE_URL_ROOT"] %></p>
 
 
     <ul>
@@ -13,4 +13,5 @@
     </ul>
 
     <br>
-    <a href='/'>Home </a>
+    <%= link_to "Home", ENV["RAILS_RELATIVE_URL_ROOT"] %>
+    <%= link_to "Home2", '/' %>

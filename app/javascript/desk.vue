@@ -93,7 +93,7 @@ export default {
         this.audioShuffle.play();
       }
 
-      let url = 'http://novoselovilya.ru/memo/images?size='+this.size+'&gallery='+this.gallery;
+      let url = 'https://novoselovilya.ru/myapp/memo/images?size='+this.size+'&gallery='+this.gallery;
       let response = await fetch(url);
       let data = await response.json();
       let iterator = 0;
@@ -134,6 +134,8 @@ export default {
       // this.message = "Game has restarted!";
     },
     rememberSelected: function(incoming_card_data){
+
+      this.modalCardSrc = incoming_card_data.card_src;// we need to preload image
 
       if(this.enableAudio){
         let card_single_sound = _.sample(this.audioCards);
@@ -229,7 +231,7 @@ export default {
               Object.keys(image_object).forEach(function(key){ image_object['status'] = "pending" });
             });
           }
-        }, 3000);
+        }, 3500);
 
         setTimeout(()=>{
 
@@ -345,9 +347,6 @@ export default {
       );
     },
     showCardModal: function( data ){
-
-        this.modalCardSrc = data.card_src;
-
         if(data.state != false){
           let $modal = this.$refs.modal;
           let temp_x = $modal.getBoundingClientRect().left + $modal.offsetWidth/2  - data.coords.x;

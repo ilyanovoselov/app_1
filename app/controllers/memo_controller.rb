@@ -15,7 +15,7 @@ class MemoController < ActionController::Base
     if(params[:gallery].blank?)
       gallery = '1_eltex'
     else
-      gallery = params[:gallery]      
+      gallery = params[:gallery]
     end
     images_array = []
     images_array_double = []
@@ -24,7 +24,7 @@ class MemoController < ActionController::Base
     # Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/1_eltex"){|x| respond_to.push(name:x) }
     pair_id = 1;
     Dir.each_child("/home/app_1/workspace/myapp/public/images/memo/"+gallery) do |file|
-      images_array.push(pair_id:pair_id,name:file.to_s, src:"images/memo/"+gallery+"/"+file,status:'')
+      images_array.push(pair_id:pair_id,name:file.to_s, src:"/myapp/images/memo/"+gallery+"/"+file,status:'')
       pair_id +=1
     end
 

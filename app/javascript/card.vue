@@ -44,7 +44,8 @@ export default {
   methods: {
     cardSelect: function (){
       if (this.status == ''){
-        this.$emit('select', {'card_id':this.custom_index, 'pair_id':this.pair_id,'player_id':0});
+        let hires_src = this.card_data.src.substring(0,this.card_data.src.lastIndexOf('/')) + '_high'+ this.card_data.src.substring( this.card_data.src.lastIndexOf('/'));
+        this.$emit('select', {'card_id':this.custom_index, 'pair_id':this.pair_id,'player_id':0,'card_src':hires_src,});
       }
     },
     cardCoord: function(){
@@ -60,9 +61,7 @@ export default {
         // clean_name = _.capitalize(clean_name);
         clean_name = _.upperFirst(clean_name);
 
-        let hires_src = this.card_data.src.substring(0,this.card_data.src.lastIndexOf('/')) + '_high'+ this.card_data.src.substring( this.card_data.src.lastIndexOf('/'));
-        console.log(hires_src);
-        this.$emit('modal', {'card_src':hires_src, 'state':true, 'name':clean_name, 'coords': this.card_coord});
+        this.$emit('modal', {'state':true, 'name':clean_name, 'coords': this.card_coord});
       }
     },
   },
@@ -128,7 +127,7 @@ export default {
 }
 .card-back{
   z-index: 2;
-  background-image: url('/images/memo/memo_card_back.png');
+  background-image: url('/myapp/images/memo/memo_card_back.png');
 }
 
 .classic-gallery .card-back{

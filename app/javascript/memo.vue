@@ -231,6 +231,13 @@ export default {
     box-sizing: border-box;
     font-family: fantasy;
     font-family: 'Roboto', sans-serif;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
   }
 
   #app.size_16{
@@ -250,6 +257,11 @@ export default {
       width:50%;
       margin-left: auto;
       margin-right: auto;
+  }
+  @media(max-width:700px){
+    #app.size_36 #menu button{
+        width:100%;
+    }
   }
   #app button{
     font-family: fantasy;

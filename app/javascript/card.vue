@@ -1,5 +1,5 @@
 <template>
-  <div class='card' v-on:click="cardSelect" v-bind:class="classObject" v-bind:style="{ transform: 'rotate('+ card_rotate+')'}">
+  <div class='card' v-on:click="cardSelect" v-bind:class="classObject" v-bind:style="{ transform: 'rotate('+ card_rotate+')'}" v-long-press="500" @long-press-start="onLongPressStart">
     <div  class="card-face card-back">
     </div>
     <div class="card-face card-front" :style="{ backgroundImage: `url(${card_data.src})` }" :alt="card_data.name">
@@ -43,14 +43,28 @@ export default {
   },
   methods: {
     cardSelect: function (){
-      this.$emit('select', {'card_id':this.custom_index, 'pair_id':this.pair_id,'player_id':0});
+      if (this.status == ''){
+        this.$emit('select', {'card_id':this.custom_index, 'pair_id':this.pair_id,'player_id':0});
+      }
     },
     cardCoord: function(){
       this.card_coord = {
-        x: this.$el.getBoundingClientRect().left,
-        y: this.$el.getBoundingClientRect().top
+        x: this.$el.getBoundingClientRect().left + this.$el.offsetWidth/2,
+        y: this.$el.getBoundingClientRect().top + this.$el.offsetHeight/2
       }
-    }
+    },
+    onLongPressStart () {
+      if (this.status == 'pending'){
+        let clean_name = this.card_data.name.slice(0, this.card_data.name.indexOf('.'));
+        clean_name = clean_name.split('_').join(' ');
+        // clean_name = _.capitalize(clean_name);
+        clean_name = _.upperFirst(clean_name);
+
+        let hires_src = this.card_data.src.substring(0,this.card_data.src.lastIndexOf('/')) + '_high'+ this.card_data.src.substring( this.card_data.src.lastIndexOf('/'));
+        console.log(hires_src);
+        this.$emit('modal', {'card_src':hires_src, 'state':true, 'name':clean_name, 'coords': this.card_coord});
+      }
+    },
   },
   updated: function(){
     this.cardCoord();
@@ -60,7 +74,7 @@ export default {
   },
   watch:  {
     status: function(){
-      console.log(this.status);
+      // console.log(this.status);
       if (this.status == 'pending'){
         this.$el.style.transform = '';
       }
@@ -128,7 +142,7 @@ export default {
 
 .card.active{
   transform: rotateY(180deg);
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .card.active:hover{

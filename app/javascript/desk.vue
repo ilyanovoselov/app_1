@@ -1,8 +1,15 @@
 <template>
   <div id="desk" v-if="seen" v-bind:class="[deskPlayable]" v-bind:style="{height:deskHeight}">
-    <p>{{ message }}</p>
+    <p id="mes_hide">{{ message }}</p>
     <div class="players-panel"><div v-for="player in players" v-bind:class="player.class" >{{ player.name }} : {{ player.score }}</div></div>
-    <card v-for="(img,index) in images" v-bind:key="img.id" v-bind:card_data="img" v-bind:custom_index="index" v-bind:gallery="gallery" @select="rememberSelected" ref="cardChild"></card>
+    <card v-for="(img,index) in images" v-bind:key="img.id" v-bind:card_data="img" v-bind:custom_index="index" v-bind:gallery="gallery" @select="rememberSelected" @modal="showCardModal" ref="cardChild"></card>
+
+    <div class="modal-cape" v-bind:class="{active:seenModal}" v-on:click="showCardModal({'card_src':'','state':false,'name':''})">
+      <div class="card-modal" v-bind:class="{active:seenModal}" ref="modal">
+        <img v-bind:src="modalCardSrc" alt="">
+        <h2>{{modalCardName}}</h2>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -32,7 +39,10 @@ export default {
         new Audio('sounds/card_single_4.mp3'),
         new Audio('sounds/card_single_5.mp3'),
         new Audio('sounds/card_single_6.mp3'),
-      ]
+      ],
+      seenModal:false,
+      modalCardSrc:'',
+      modalCardName:''
     }
   },
   mounted(){
@@ -191,10 +201,11 @@ export default {
 
         setTimeout(()=>{
 
-          if(temp_status ==''){
-              let rotate_factor = _.random(-1.5, 1.5);
+          if(temp_status ==''){;
+              let rotate_factor;
+              rotate_factor =  (_.random(0,1)) ? _.random(-1.5, -1) : _.random(1, 1.5);
               this.selected_cards[0].rotate =  rotate_factor+"deg";
-              rotate_factor = _.random(-1.5, 1.5);
+              rotate_factor =  (_.random(0,1)) ? _.random(-1.5, -1) : _.random(1, 1.5);
               this.selected_cards[1].rotate =  rotate_factor+"deg";
 
               if(this.enableAudio){
@@ -322,7 +333,7 @@ export default {
         }
       }
 
-      console.log(guess_card_indeces_array);
+      // console.log(guess_card_indeces_array);
 
       //*) get new guess card index from zone
       let new_guess = _.sample(guess_card_indeces_array);
@@ -332,7 +343,30 @@ export default {
       this.rememberSelected(
         {'card_id':new_guess.id, 'pair_id':new_guess.pairID, 'player_id':1}
       );
+    },
+    showCardModal: function( data ){
 
+        this.modalCardSrc = data.card_src;
+
+        if(data.state != false){
+          let $modal = this.$refs.modal;
+          let temp_x = $modal.getBoundingClientRect().left + $modal.offsetWidth/2  - data.coords.x;
+          let temp_y = $modal.getBoundingClientRect().top + $modal.offsetHeight/2  - data.coords.y;
+          // console.log($modal.getBoundingClientRect().left + $modal.offsetWidth/2);
+          // console.log($modal.getBoundingClientRect().top + $modal.offsetHeight/2);
+          $modal.style.transform = 'translateX('+temp_x*(-1)+'px)'+' translateY('+temp_y*(-1)+'px)'+' scale(0.1)';
+          setTimeout(()=>{
+            this.seenModal = data.state;
+            this.modalCardName = data.name;
+            this.$refs.modal.style.transform = 'translateX(0) translateY(0) scale(1)';
+          },300);
+          // Velocity(this.$refs.modal.$el, {translateX: "0",translateY:"0"});
+          //Velocity(card_child.$el, 'reverse');
+        } else {
+          this.seenModal = data.state;
+
+          this.modalCardName = data.name;
+        }
     }
   }
 }
@@ -390,4 +424,54 @@ p {
     font-size: 24px;
   }
 }
+
+.modal-cape{
+  cursor:pointer;
+  transition: all 0.3s;
+  opacity: 0;
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color: #000000aa;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.modal-cape.active{
+  opacity: 1;
+  pointer-events: all;
+}
+
+.card-modal{
+  transition: all 0.3s cubic-bezier(.2,.05,1,.43);
+  transform: scale(1);
+  padding-top:100px;
+  width:700px;
+  height:700px;
+  margin:auto;
+  pointer-events: none;
+  color: white;
+}
+
+.card-modal img{
+  width: 100%;
+  /* width:400px;
+  height:400px;
+  margin: auto; */
+}
+ @media(max-width:700px){
+   .card-modal{
+     /* width:90%;
+     height:auto; */
+     width:300px;
+     height:300px;
+   }
+ }
+
+ #mes_hide{
+   display:none;
+ }
+
 </style>

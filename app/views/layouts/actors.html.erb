@@ -4,7 +4,7 @@
     <title><%= yield(:title) %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <%= javascript_pack_tag 'hello_vue' %> 
+    <%= javascript_pack_tag 'hello_vue' %>
   </head>
 
   <body>
@@ -13,6 +13,12 @@
     <a href='/'>Home</a><br>
     ____________________<br>
     All actor controller page text
+
+    <!-- <div id='hello' v-bind:title="message" v-if="seen">
+      {{message}}
+      <app></app> 
+    </div> -->
+
 
   </body>
 </html>

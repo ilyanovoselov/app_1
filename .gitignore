@@ -43,6 +43,7 @@
 yarn-debug.log*
 .yarn-integrity
 
-app/assets/images/
-public/images/
-
+#ignore images assets
+/public/images
+/public/sounds
+/app/assets/images
